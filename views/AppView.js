@@ -13,6 +13,10 @@ var AppView = Backbone.View.extend({
 
     this.$beerList = this.$('.beer-list');
 
+    this.detailView = null;
+
+    this.listenTo(this.model, 'change:current_beer', this.renderDetailView);
+
     this.listenTo(this.model.get('beers'), 'add', this.renderBeer);
 
     this.listenTo(this.model, 'change:show_reviews', this.renderPage);
@@ -43,5 +47,16 @@ var AppView = Backbone.View.extend({
     this.model.get('beers').each(function (m) {
       this.renderBeer(m);
     }, this);
+  },
+
+  renderDetailView: function () {
+  if (this.detailView) {
+    this.detailView.remove();
   }
+
+  this.detailView = new BeerDetailView({ model: this.model.get('current_beer')});
+
+  this.$('.reviews-container').append(this.detailView.render().el);
+  }
+
 });
