@@ -19,6 +19,8 @@ var AppView = Backbone.View.extend({
 
     this.listenTo(this.model.get('beers'), 'add', this.renderBeer);
 
+    this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
+
     this.listenTo(this.model, 'change:show_reviews', this.renderPage);
 
     this.renderBeers();
@@ -30,12 +32,12 @@ var AppView = Backbone.View.extend({
   },
 
   createBeer: function () {
-    this.model.get('beers').add({
-      name: this.$nameInput.val(),
-      style: this.$styleInput.val(),
-      abv: this.$abvInput.val(),
-      image_url: this.$imgUrl.val()
-    });
+    this.model.get('beers').create({
+      name: this.$('#name-input').val(),
+      style: this.$('#style-input').val(),
+      abv: parseInt(this.$('#abv-input').val()),
+      image_url: this.$('img-url').val()
+    }, { wait: true });
   },
 
   renderBeer: function (beer) {
